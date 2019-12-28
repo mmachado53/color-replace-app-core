@@ -1,0 +1,23 @@
+{
+  "name": "color-replace-app-core",
+  "version": "1.0.0",
+  "description": "a core scripts for https://github.com/mmachado53/wColorizeJS",
+  "main": "index.js",
+  "dependencies": {
+    "pixi.js": "^5.1.5",
+    "wayak-pixels-selector": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmachado53/color-replace-app-core.git"
+  },
+  "author": "mmachado53 Miguel Machado mmachado53@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmachado53/color-replace-app-core/issues"
+  },
+  "homepage": "https://github.com/mmachado53/color-replace-app-core#readme"
+}
