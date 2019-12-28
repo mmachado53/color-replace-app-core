@@ -1,13 +1,16 @@
 {
   "name": "color-replace-app-core",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "a core scripts for https://github.com/mmachado53/wColorizeJS",
-  "main": "index.js",
+  "main": "lib/BoardController.js",
   "dependencies": {
     "pixi.js": "^5.1.5",
-    "wayak-pixels-selector": "^1.0.0"
+    "wayak-pixels-selector": "^1.0.0",
+    "wayak-rgb-utils": "^1.0.0"
   },
   "scripts": {
+    "compile": "babel src --out-dir lib",
+    "prepublish": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/mmachado53/color-replace-app-core/issues"
   },
-  "homepage": "https://github.com/mmachado53/color-replace-app-core#readme"
+  "homepage": "https://github.com/mmachado53/color-replace-app-core#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-proposal-class-properties": "^7.7.4"
+  }
 }
