@@ -18,12 +18,35 @@ function loadImage(src) {
     });
 };
 
+/** Class representing a controller for board. "new BoardController()" */
 class BoardController {
+
+    /**
+     * The BoardController.TOOL_BRUSH is a identifier for a brush tool
+     * @static
+     */
     static TOOL_BRUSH = "TOOL_BRUSH"
+    /**
+     * The BoardController.TOOL_MAGIC_WAND is a identifier for a magic wand tool
+     * @static
+     */
     static TOOL_MAGIC_WAND = "TOOL_MAGIC_WAND"
+    /**
+     * The BoardController.TOOL_POLYGON is a identifier for a polygon tool
+     * @static
+     */
     static TOOL_POLYGON = "TOOL_POLYGON"
+    /**
+     * The BoardController.TOOLS is array with all tools
+     * @static
+     */
     static TOOLS = []
 
+    /**
+     * Create BoardController instance
+     * @constructs BoardController
+     * @function
+     */
     constructor(){
         this.layerCount=0;
         this.layers=[];
@@ -42,6 +65,22 @@ class BoardController {
 
     }
 
+
+
+    /**
+     * load the base image and start all the context of the boardController.
+     *
+     * @async
+     * @function loadImage
+     * @param {(Window | HTMLElement)} containerHTMLElement - the container element for the board canvas
+     * @param {string} url - The URL to download the base image.
+     * @param {Int} maxSize - OPTIONAL maximum size for the base image
+     * @return {Promise<Canvas>} the html canvas instance of the board.
+     * @example
+     * boardControllerInstance.loadImage(htmlElement,imageURL,900).then((canvas)=>{
+     *    htmlElement.appendChild(canvas)
+     * })
+     */
     async loadImage(containerHTMLElement,url,maxSize){
         this.containerHTMLElement = containerHTMLElement
         var image = await loadImage(url)
@@ -138,6 +177,20 @@ class BoardController {
         //this.photoAndLayersContainer.addChild(this.selectionCtrl.selectionSprite);
     };
 
+    /**
+     * return tools values
+     *
+     * @function getToolsValues
+     * @return {Array} Associative Array
+     * @example
+     * // return [
+     * //             BoardController.TOOL_BRUSH : {size:0,hardness:0,type:1 ( 1 = paint,0 = erease )},
+     * //             BoardController.TOOL_MAGIC_WAND : {tolerance:0,type:1 ( 1 = paint,0 = erease )},
+     * //             ]
+     * boardControllerInstance.loadImage(htmlElement,imageURL,900).then((canvas)=>{
+     *   htmlElement.appendChild(canvas)
+     * })
+     */
     getToolsValues(){
         if(!this.toolsValues){
             this.toolsValues=[];
@@ -155,33 +208,88 @@ class BoardController {
         return this.toolsValues;
     }
 
+    /**
+     * Set the size of the brush tool
+     *
+     * @function setBrushSize
+     * @param {Int} val - the new size of the brush
+     * @example
+     * boardControllerInstance.setBrushSize(20) // the brush size now is 20px
+     */
     setBrushSize(val){
         BoardController.TOOLS[BoardController.TOOL_BRUSH].setSize(val);
     };
+    /**
+     * Set the hardness of the brush tool
+     *
+     * @function setBrushHardness
+     * @param {Int} val - the new hardness value of the brush (0-100)
+     * @example
+     * boardControllerInstance.setBrushHardness(20) // the brush size now is 20
+     */
     setBrushHardness(val){
         BoardController.TOOLS[BoardController.TOOL_BRUSH].setHardness(val*.01);
     };
+
+    /**
+     * Configure the brush tool to paint on the selected layer
+     *
+     * @function setBrushToAdd
+     */
     setBrushToAdd(){
         BoardController.TOOLS[BoardController.TOOL_BRUSH].setToAdd()
     }
+    /**
+     * Configure the brush tool to erease on the selected layer
+     *
+     * @function setBrushToRemove
+     */
     setBrushToRemove(){
         BoardController.TOOLS[BoardController.TOOL_BRUSH].setToRemove()
     }
 
+    /**
+     * Configure the magic wand tool with new tolerance
+     *
+     * @function setMagicWandTolerance
+     * @param {Int} val - the new tolerance value  (1-200)
+     */
     setMagicWandTolerance(val){
         BoardController.TOOLS[BoardController.TOOL_MAGIC_WAND].setTolerance(val)
     }
+
+    /**
+     * Allows you to see the result of the magic wand tool without even applying the changes
+     *
+     * @function fillMagicWand
+     */
     fillMagicWand() {
         BoardController.TOOLS[BoardController.TOOL_MAGIC_WAND].fillFromPickedColor()
     }
 
+    /**
+     * Configure the magic wand tool to paint on the selected layer
+     *
+     * @function setMagicWandToAdd
+     */
     setMagicWandToAdd(){
         BoardController.TOOLS[BoardController.TOOL_MAGIC_WAND].setToAdd()
     }
+
+    /**
+     * Configure the magic wand tool to erease on the selected layer
+     *
+     * @function setMagicWandToRemove
+     */
     setMagicWandToRemove(){
         BoardController.TOOLS[BoardController.TOOL_MAGIC_WAND].setToRemove()
     }
 
+    /**
+     * Apply the results of the magic wand tool in the selected layer
+     *
+     * @function applyMagicWandToSelectedLayer
+     */
     applyMagicWandToSelectedLayer(){
         BoardController.TOOLS[BoardController.TOOL_MAGIC_WAND].apply()
     }
@@ -327,6 +435,12 @@ class BoardController {
         this.updateToolUI();
     }
 
+    /**
+     * Set the active tool
+     *
+     * @function setTool
+     * @param {String} tool - can be BoardController.TOOL_BRUSH, BoardController.TOOL_MAGIC_WAND or BoardController.TOOL_POLYGON
+     */
     setTool(tool){
         if(this.currentTool){this.currentTool.setActive(null);}
         this.currentTool=tool == null ? null : BoardController.TOOLS[tool];
@@ -341,6 +455,12 @@ class BoardController {
         }
     }
 
+    /**
+     * Add a new layer and select it
+     *
+     * @function addLayer
+     * @return {Object} object with info of the created layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     addLayer(){
         var layerID=this.layerCount;
         var layerName="layer "+this.layerCount;
@@ -362,6 +482,13 @@ class BoardController {
         return null;
     }
 
+    /**
+     * Select a layer based on the id
+     *
+     * @function selectLayer
+     * @param id {Int} - Id
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     selectLayer(id){
         var layer=this.findLayer(id);
         this.currentLayer=layer;
@@ -372,7 +499,13 @@ class BoardController {
         return layer.info;
     }
 
-
+    /**
+     * Set a black level in the selected layer
+     *
+     * @function setBlackLevelToSelectedLayer
+     * @param val {Int} - new value 0-100
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setBlackLevelToSelectedLayer(val){
         if(!this.currentLayer){return;}
         //console.log("setDarkToSelectedLayer: "+val*.001);
@@ -382,6 +515,13 @@ class BoardController {
         return this.currentLayer.info
     }
 
+    /**
+     * Set a white level in the selected layer
+     *
+     * @function setWhiteLevelToSelectedLayer
+     * @param val {Int} - new value 0-100
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setWhiteLevelToSelectedLayer = (val)=>{
         if(!this.currentLayer){return;}
         //console.log("setLightToSelectedLayer: "+val*.001);
@@ -391,6 +531,11 @@ class BoardController {
         return this.currentLayer.info
     }
 
+    /**
+     * Show a magnifying glass
+     *
+     * @function showGlass
+     */
     showGlass(){
         if(!this.glass){
             this.glass=new MagnifyingGlass(200,200,this.pixiApp.renderer,this.container,2);
@@ -400,6 +545,11 @@ class BoardController {
         this.glass.visible=true;
     }
 
+    /**
+     * Hide magnifying glass
+     *
+     * @function hideGlass
+     */
     hideGlass(){
         if(!this.glass){
             this.glass=new MagnifyingGlass(200,200,this.pixiApp.renderer,this.container);
@@ -408,6 +558,11 @@ class BoardController {
         this.glass.visible=false;
     }
 
+    /**
+     * Show/Hide magnifying glass
+     *
+     * @function switchGlass
+     */
     switchGlass(){
         const isVisible = this.glass == null ? false : this.glass.visible
         if(isVisible){
@@ -418,27 +573,60 @@ class BoardController {
 
     }
 
+    /**
+     * Set a color in the selected layer
+     *
+     * @function setColorToSelectedLayer
+     * @param colorNumber {Int} - A color number like this 0xff0000
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setColorToSelectedLayer(colorNumber){
         this.currentLayer.color = colorNumber;
         if(this.currentTool){this.currentTool.onSelectedLayerPropsChange()}
         return this.currentLayer.info
     }
 
+    /**
+     * Set a Hue in the selected layer
+     *
+     * @function setHueToSelectedLayer
+     * @param hue {Int} - hue value (0-359)
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setHueToSelectedLayer(hue){
         const {s,v} = this.currentLayer.currentHSVColor
         return this.setColorToSelectedLayer(UTILS.HSVtoRGBnumber(hue / 360,s / 100,v / 100))
     }
 
+    /**
+     * Set a Saturation in the selected layer
+     *
+     * @function setSaturationToSelectedLayer
+     * @param sat {Number} - saturation value (0.0-1.0)
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setSaturationToSelectedLayer(sat){
         const {h,v} = this.currentLayer.currentHSVColor
         return this.setColorToSelectedLayer(UTILS.HSVtoRGBnumber(h / 360,sat / 100, v / 100))
     }
 
+    /**
+     * Set a Brightness in the selected layer
+     *
+     * @function setBrightnessToSelectedLayer
+     * @param brightness {Number} - brightness value (0.0-1.0)
+     * @return {Object} object with info of the selected layer {id,name,color,hexColor,rgbColor,hsvColor,whiteLevel,blackLevel}
+     */
     setBrightnessToSelectedLayer(brightness){
         const {h,s} = this.currentLayer.currentHSVColor
         return this.setColorToSelectedLayer(UTILS.HSVtoRGBnumber(h / 360,s / 100,brightness / 100))
     }
 
+    /**
+     * Clear selection "for polygon tool"
+     *
+     * @function clearSelection
+     */
     clearSelection(){
         this.selectionCtrl.clearSelection();
     }
@@ -461,5 +649,5 @@ const getPositionFromTouch = (touch)=>{
     }
 
 }
-//module.exports = BoardController;
+
 export default BoardController

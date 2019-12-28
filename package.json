@@ -1,6 +1,6 @@
 {
   "name": "color-replace-app-core",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "a core scripts for https://github.com/mmachado53/wColorizeJS",
   "main": "lib/BoardController.js",
   "dependencies": {
