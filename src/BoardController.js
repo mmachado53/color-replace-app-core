@@ -420,10 +420,11 @@ class BoardController {
     zoomOut(delta,x,y){
         let scale=delta*.01;
         scale=this.photoAndLayersContainer.scale.x-scale;
-        if(scale<=this.initSizes.scale){
-            this.photoAndLayersContainer.scale.set(this.initSizes.scale,this.initSizes.scale);
-            this.photoAndLayersContainer.pivot.set(0,0);
-            this.photoAndLayersContainer.position.set(this.initSizes.x,this.initSizes.y);
+        let minScale = this.initSizes.scale * 0.3
+        if( scale <= minScale ){
+            this.photoAndLayersContainer.scale.set(minScale, minScale);
+            //this.photoAndLayersContainer.pivot.set(0,0);
+            //this.photoAndLayersContainer.position.set(this.initSizes.x,this.initSizes.y);
             this.updateToolUI();
             return
         }
