@@ -59,6 +59,8 @@ class BoardController {
         this.uiRenderTexture = PIXI.RenderTexture.create(this.screenWidth,this.screenHeight)
         this.uiSprite=new PIXI.Sprite(this.uiRenderTexture);
 
+        this.magicWandCallBack = null
+
         this.timerForPinchToZoomGesture = null
         this.lastPinchGestureData = null
         this.lastMousePointClicked = null

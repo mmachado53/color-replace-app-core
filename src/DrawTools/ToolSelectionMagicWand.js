@@ -96,6 +96,9 @@ class ToolSelectionMagicWand extends BaseDrawTool{
 
     mouseUp(pos) {
         if(this.layer && this.isDraging === true){
+            if(this.boarCtrl.magicWandCallBack){
+                this.boarCtrl.magicWandCallBack()
+            }
             this.fillFromPickedColor()
         }
         this.isDraging = false
