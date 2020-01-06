@@ -634,6 +634,20 @@ class BoardController {
         this.selectionCtrl.clearSelection();
     }
 
+    /**
+     * Build and return a result canvas
+     *
+     * @function getCanvasResult
+     * @return {Canvas}
+     */
+    getCanvasResult(){
+        let renderer = PIXI.RenderTexture.create(this.baseCanvas.width,this.baseCanvas.height)
+        this.photoAndLayersContainer.children.forEach((children,index)=>{
+            this.pixiApp.renderer.render(children,renderer,false)
+        })
+        return this.pixiApp.renderer.extract.canvas(renderer)
+    }
+
 }
 
 const makeNewPinchGestureData = (touchA,touchB)=>{
